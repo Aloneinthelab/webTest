@@ -7,7 +7,7 @@ var assert = require('assert');
 app.set('port', (process.env.PORT || 5000));
 
 app.get('/', function(request, response) {
-  response.render('pages/index')
+  response.render('pages/index.html')
 });
 
 app.get('/cool', function(request, response) {
