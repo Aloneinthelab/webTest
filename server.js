@@ -7,8 +7,13 @@ var assert = require('assert');
 app.set('port', (process.env.PORT || 5000));
 
 app.get('/', function(request, response) {
+  response.render('pages/index')
+});
+
+app.get('/cool', function(request, response) {
   response.send(cool());
 });
+
 
 app.listen(app.get('port'), function() {
   console.log("Node app is running on port:" + app.get('port'))
@@ -49,7 +54,7 @@ MongoClient.connect(url, function (err, db) {
 
 
     collection.update({ nombre : 'Jonathan' }
-          , { $set: { email : 'pepe@hotmail.com' } }, function(err, result) {
+          , { $set: { email : 'manuel@hotmail.com' } }, function(err, result) {
             //assert.equal(err, null);
             //assert.equal(1, result.result.n);
             console.log("Updated the document");
