@@ -5,6 +5,7 @@ var mongodb = require('mongodb');
 var assert = require('assert');
 
 app.set('port', (process.env.PORT || 5000));
+app.use(express.static(path.join(__dirname, 'pages')));
 
 app.get('/', function(request, response) {
   response.render('pages/index.html')
