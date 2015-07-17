@@ -1,5 +1,4 @@
-var express = require('express');
-var app = express();
+var app = require('express')();
 var http = require('http').Server(app);
 var cool = require('cool-ascii-faces');
 var mongodb = require('mongodb');
@@ -7,15 +6,37 @@ var assert = require('assert');
 var io = require('socket.io')(http);
 
 app.set('port', (process.env.PORT || 5000));
-
-app.get('/', function(request, response) {
-  response.sendfile('pages/index.html')
+app.get('/', function(req, res){
+  res.sendFile(__dirname + '/pages/index.html');
 });
 
-app.get('/cool', function(request, response) {
-  response.send(cool());
+io.sockets.on('connection', function(socket){
+  console.log('a user connected');
+  socket.on('log in', function(nick,pass){
+    console.log('message: ' + nick + " -- " + pass);
+  });
+  socket.on('sing up', function(nick,pass){
+    console.log('message: ' + nick + " -- " + pass);
+  });
+  socket.on('profile', function(nick,pass){
+    console.log('message: ' + nick + " -- " + pass);
+  });
+  socket.on('update', function(nick,pass){
+    console.log('message: ' + nick + " -- " + pass);
+  });
+  socket.on('hello message', function(msg){
+    console.log('message: ' + msg);
+  });
+  socket.on('disconnect', function(){
+    console.log('user disconnected');
+  });
 });
 
+http.listen(3000, function(){
+  console.log('listening on *:3000');
+});
+
+/*
 
 app.listen(app.get('port'), function() {
   console.log("Node app is running on port:" + app.get('port'))
@@ -36,7 +57,7 @@ MongoClient.connect(url, function (err, db) {
     //HURRAY!! We are connected. :)
     console.log('Connection established to', url);
     var collection = db.collection('users');
-
+*/
     /*
     var user1 = {
   		nombre    : 'Jonathan',
@@ -54,7 +75,7 @@ MongoClient.connect(url, function (err, db) {
       }
   	});*/
 
-
+/*
     collection.update({ nombre : 'Jonathan' }
           , { $set: { email : 'manuel@hotmail.com' } }, function(err, result) {
             //assert.equal(err, null);
@@ -75,7 +96,7 @@ MongoClient.connect(url, function (err, db) {
       }
     });
 
-
+    */
     /*
       var updateDocument = function(db, callback) {
         // Get the documents collection 
@@ -92,5 +113,5 @@ MongoClient.connect(url, function (err, db) {
     */
     //Close connection
     //db.close();
-}
-});
+//}
+//});
