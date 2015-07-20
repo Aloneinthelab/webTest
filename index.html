@@ -15,16 +15,9 @@
   </head>
   <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
   <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
-  <script>
-    var socket = io();
-    $(document).ready("#button").click(function(){
-      var nick = $("#nick").val();
-      var pass = $("#pass").val();
-      if(nick && pass){
-        socket.emit('log in',nick,pass);
-      }
-    });
-  </script>
+  <script src="main.js"></script>
+
+
   <body>
     <ul id="messages"></ul>
     <form action="">

@@ -1,23 +1,25 @@
-var app = require('express')();
-var http = require('http').Server(app);
-var cool = require('cool-ascii-faces');
+var static = require('node-static');
+var http = require('http');
 var mongodb = require('mongodb');
-var assert = require('assert');
-var io = require('socket.io')(http);
+var file = new(static.Server)();
 
-app.set('port', (process.env.PORT || 5000));
-app.get('/', function(req, res){
-  res.sendFile(__dirname + '/pages/index.html');
-});
+
+var app = http.createServer(function (req, res) {
+  if(req.url === '/'){
+    file.serveFile('/index.html', 200, {}, req, res);
+  } else {
+      file.serve(req, res, function(error, errorRes) {
+          if (error && (error.status === 404)) {
+                file.serveFile('/nofichero.html', 404, {}, req, res);
+            }
+        });
+    }
+}).listen(process.env.PORT || 5000);
+
+var io = require('socket.io').listen(app);
 
 io.sockets.on('connection', function(socket){
   console.log('a user connected');
-  socket.on('log in', function(nick,pass){
-    console.log('message: ' + nick + " -- " + pass);
-  });
-  socket.on('sing up', function(nick,pass){
-    console.log('message: ' + nick + " -- " + pass);
-  });
   socket.on('profile', function(nick,pass){
     console.log('message: ' + nick + " -- " + pass);
   });
@@ -32,16 +34,7 @@ io.sockets.on('connection', function(socket){
   });
 });
 
-http.listen(3000, function(){
-  console.log('listening on *:3000');
-});
-
 /*
-
-app.listen(app.get('port'), function() {
-  console.log("Node app is running on port:" + app.get('port'))
-})
-
 
 //We need to work with "MongoClient" interface in order to connect to a mongodb server.
 var MongoClient = mongodb.MongoClient;
