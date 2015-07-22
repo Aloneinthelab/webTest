@@ -11,7 +11,7 @@ $(document).ready(function(){
     	//Aqui iria la autenticación
 
     	if(authOK){
-    		window.location="/indexRoom";
+    		window.location.href="/indexRoom";
     	}
 	});
 });
