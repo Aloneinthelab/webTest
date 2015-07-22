@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta name='description' content='Cliente VideoChat' />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        <script type="text/javascript" src='/socket.io/socket.io.js'></script>
+        <script type="text/javascript" src='js/lib/adapter.js'></script>
+        <title>LWDI - rooms</title>
+
+    </head>
+
+    <body>
+
+        <nav class="navbar navbar-inverse">
+          <div class="container-fluid">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-2">
+
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="#">LWDI</a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
+              <ul class="nav navbar-nav">
+                <li><a id="info" href="/about" title="Información adicional de la aplicación">Info</a></li>
+            </div>
+          </div>
+        </nav>
+
+
+        <div class="container mainContainer">
+            <h1 id="header" class="heading">Bienvenido</h1>
+            <fieldset>
+              <label for="room" class="sr-only" >Sala</label>
+              <input id="room" class="form-control" placeholder="Sala" type="text" title="Nombre de la sala de chat a la que se desea entrar" alt="Nombre de la sala de chat" required autofocus >
+              <label for="user" class="sr-only">Usuario</label>
+              <input id="user" class="form-control" placeholder="Usuario" type="text" title="Nombre de usuario con el que se desea entrar a la sala" alt="Nombre de usuario " required autofocus>
+            </fieldset>
+
+            <button class="btn btn-lg btn-default btn-block" id="goButton">Entra a la sala</button>
+
+          </div>
+
+        <script src="js/rooms/init.js"></script>
+    </body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta name='description' content='Cliente VideoChat' />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<script type="text/javascript" src='/socket.io/socket.io.js'></script>
+		<script type="text/javascript" src='js/lib/adapter.js'></script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+		<title>LWDI - room</title>
+
+	</head>
+
+	<body>
+
+		<nav class="navbar navbar-inverse">
+		  <div class="container-fluid">
+		    <div class="navbar-header">
+		      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-2">
+
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		        <span class="icon-bar"></span>
+		      </button>
+		      <a class="navbar-brand" href="#">LWDI</a>
+		    </div>
+
+		    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
+		      <ul class="nav navbar-nav">
+				<li><a id="endComunication" title="Abandonar la comunicación en esta sala" >Abandonar la sala</a></li>
+		      </ul>
+
+		      <ul class="nav navbar-nav navbar-right">
+		        <li><a id="info" title="Información adicional sobre la aplicación" href="about.html">Info</a></li>
+
+		      </ul>
+		    </div>
+		  </div>
+		</nav>
+		<div class="container">
+			<div class="row">
+				<div id="local" class="col-md-3 col-md-offset-1 col-xs-12 ">
+					<div>
+		    			<span id="localtag" class="label label-default col-md-11 col-xs-11 col-sm-11 "></span>
+		    		</div>
+		    		<audio id='localVideo' alt="Local video" autoplay muted></audio>
+						<div>
+							<p id="msg"></p>
+						</div>
+
+		  		</div>
+		  		<div id="remoto" class="col-md-6 col-md-offset-1 col-xs-12 ">
+		  			<div>
+		    			<span id="remotetag" class="label label-default col-md-12 col-xs-12 col-sm-12 col-md-offset-0">...</span>
+		    		</div>
+		  			<audio id="remoteVideo" alt="Remote video" autoplay ></audio>
+		</div>
+
+
+		<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src='js/rooms/main.js'></script>
+
+	</body>
+</html>
