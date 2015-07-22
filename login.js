@@ -11,6 +11,7 @@ $(document).ready(function(){
     	//Aqui iria la autenticación
 
     	if(authOK){
+            alert("vamos a indexroom");
     		window.location.href="/indexRoom";
     	}
 	});
