@@ -20,10 +20,11 @@ var isAuthenticated = function (req, res, next) {
 module.exports = function(passport) {
     
     /* GET login page. */
-  /*router.get('/', function(req, res) {
+  router.get('/', function(req, res) {
+  	console.log("pasamos por export");
     // Display the Login page with any flash message, if any
-    res.render('index', { message: req.flash('message') });
-  });*/
+    res.render('index.html', { message: req.flash('message') });
+  });
 
   /* Handle Login POST */
   router.post('/login', passport.authenticate('login', {

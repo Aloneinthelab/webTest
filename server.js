@@ -8,18 +8,50 @@ app.use(express.static('public'));
 server.listen(5000);
 
 // respond with "hello world" when a GET request is made to the homepage
+
+var dbConfig = require('./passport/db.js');
+var mongoose = require('mongoose');
+mongoose.connect(dbConfig.url);
+
+// Configuring Passport
+
+var passport = require('passport');
+var expressSession = require('express-session');
+var LocalStrategy = require('passport-local').Strategy;
+require('./passport/model/user');
+require('./passport/model/Post');
+require('./passport/model/Comment');
+
+app.use(expressSession(
+  {secret: 'mySecretKey',
+  proxy: true,
+  resave: true,
+  saveUninitialized: true}
+  ));
+app.use(passport.initialize());
+app.use(passport.session());
+// Using the flash middleware provided by connect-flash to store messages in session
+// and displaying in templates
+var flash = require('connect-flash');
+app.use(flash());
+var initPassport = require('./passport/init');
+initPassport(passport);
+
+var routesFunction = require('./passport/routes/index')
+var routes = routesFunction(passport);
+
 app.get('/', function(req, res) {
   res.sendFile(__dirname + '/index.html');
 });
-
-
-
-
-
-
-
-
-
+app.get('/login', function(req, res) {
+  res.sendFile(__dirname + '/login.html');
+});
+app.get('/signup', function(req, res) {
+  res.sendFile(__dirname + '/signup.html');
+});
+app.get('/', function(req, res) {
+  res.sendFile(__dirname + '/index.html');
+});
 /*var mongodb = require('mongodb');
 var dbConfig = require('./passport/db.js');
 var mongoose = require('mongoose');
