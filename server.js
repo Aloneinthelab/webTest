@@ -1,15 +1,17 @@
 var mongodb = require('mongodb');
-var dbConfig = require('./db.js');
+var dbConfig = require('./passport/db.js');
 var mongoose = require('mongoose');
 mongoose.connect(dbConfig.url);
 
 
 // Configuring Passport
+
 var passport = require('passport');
 var express = require('express');
 var expressSession = require('express-session');
 var appPas = express();
 var LocalStrategy = require('passport-local').Strategy;
+require('./passport/model/user');
 
 appPas.use(expressSession(
   {secret: 'mySecretKey',
@@ -19,83 +21,19 @@ appPas.use(expressSession(
   ));
 appPas.use(passport.initialize());
 appPas.use(passport.session());
+// Using the flash middleware provided by connect-flash to store messages in session
+// and displaying in templates
+var flash = require('connect-flash');
+appPas.use(flash());
+
+// Initialize Passport
+var initPassport = require('./passport/init');
+initPassport(passport);
 
 
-passport.serializeUser(function(user, done) {
-  done(null, user._id);
-});
- 
-passport.deserializeUser(function(id, done) {
-  User.findById(id, function(err, user) {
-    done(err, user);
-  });
-});
 
-// Generates hash using bCrypt
-var createHash = function(password){
-    return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
-}
-
-passport.use('login',new LocalStrategy({
-  passReqToCallback : true},function(username, password, done) {
-    User.findOne({ username: username }, function(err, user) {
-      if (err) { return done(err); }
-      if (!user) {
-        return done(null, false, { message: 'Incorrect username.' });
-      }
-      if (!user.validPassword(password)) {
-        return done(null, false, { message: 'Incorrect password.' });
-      }
-      return done(null, user);
-    });
-  }
-));
-
-
-passport.use('signup', new LocalStrategy({
-  passReqToCallback : true},function(req, username, password, done) {
-    console.log("Entrando en el singup");
-    findOrCreateUser = function(){
-    // find a user in Mongo with provided username
-      User.findOne({'username':username},function(err, user) {
-      // In case of any error return
-        if (err){
-          console.log('Error in SignUp: '+err);
-          return done(err);
-        }
-        // already exists
-        if (user) {
-          console.log('User already exists');
-          return done(null, false, req.flash('message','User Already Exists'));
-        } else {
-          // if there is no user with that email
-          // create the user
-          var newUser = new User();
-          // set the user's local credentials
-          newUser.username = username;
-          newUser.password = createHash(password);
-          newUser.email = req.param('email');
-          //newUser.firstName = req.param('firstName');
-          //newUser.lastName = req.param('lastName');
-          // save the user
-          newUser.save(function(err) {
-            if (err){
-              console.log('Error in Saving user: '+err);  
-              throw err;  
-            }
-            console.log('User Registration succesful');    
-            return done(null, newUser);
-          });
-        }
-      });
-    };
-     
-    // Delay the execution of findOrCreateUser and execute 
-    // the method in the next tick of the event loop
-    process.nextTick(findOrCreateUser);
-  })
-);
-
+//Create Routes
+var routes = require('./passport/routes/index');
 
 var static = require('node-static');
 var http = require('http');
