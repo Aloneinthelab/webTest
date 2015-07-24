@@ -8,7 +8,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 		<link href="css/bootstrap.min.css" rel="stylesheet">
 		<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
-		<script src="/js/singup.js"></script>
+		<script src="/js/signup.js"></script>
 		<!--[if lt IE 9]>
 			<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
 		<![endif]-->
@@ -16,7 +16,7 @@
 	</head>
 	<body>
 <!--login modal-->
-<div id="singupModal" class="modal show" tabindex="-1" role="dialog" aria-hidden="true" style="overflow-y: scroll;">
+<div id="signupModal" class="modal show" tabindex="-1" role="dialog" aria-hidden="true" style="overflow-y: scroll;">
   <div class="modal-dialog">
   <div class="modal-content">
       <div class="modal-header">
@@ -24,7 +24,7 @@
           <h1 class="text-center">New User</h1>
       </div>
       <div class="modal-body">
-          <form action="/singup" method="post" class="form col-md-12 center-block">
+          <form action="/signup" method="post" class="form col-md-12 center-block">
             <div class="form-group">
               <input id="username" name="username" class="form-control input-lg" placeholder="Username" autocomplete="off" />
             </div>

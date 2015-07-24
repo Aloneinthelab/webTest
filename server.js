@@ -50,7 +50,7 @@ var app = http.createServer(function (req, res) {
         failureRedirect: '/login',
         failureFlash : true 
       });
-    }else if(req.url === "/singup"){
+    }else if(req.url === "/signup"){
       console.log("manejando post de singup");
       passport.authenticate('signup', {
         successRedirect: '/index',
@@ -66,8 +66,8 @@ var app = http.createServer(function (req, res) {
     file.serveFile('/profile.html', 200, {}, req, res);
   }else if(req.url === '/indexRoom'){
     file.serveFile('/indexRoom.html', 200, {}, req, res);
-  }else if(req.url === '/singup'){
-    file.serveFile('/singup.html', 200, {}, req, res);
+  }else if(req.url === '/signup'){
+    file.serveFile('/signup.html', 200, {}, req, res);
   }else if(req.url === '/about'){
     file.serveFile('/about.html', 200, {}, req, res);
   } else {
