@@ -1,4 +1,26 @@
-var mongodb = require('mongodb');
+var express = require('express');
+var app = express();
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
+app.use(express.static('public'));
+//app.use(express.static('public'));
+
+server.listen(5000);
+
+// respond with "hello world" when a GET request is made to the homepage
+app.get('/', function(req, res) {
+  res.sendFile(__dirname + '/index.html');
+});
+
+
+
+
+
+
+
+
+
+/*var mongodb = require('mongodb');
 var dbConfig = require('./passport/db.js');
 var mongoose = require('mongoose');
 mongoose.connect(dbConfig.url);
@@ -12,6 +34,8 @@ var expressSession = require('express-session');
 var appPas = express();
 var LocalStrategy = require('passport-local').Strategy;
 require('./passport/model/user');
+require('./passport/model/Post');
+require('./passport/model/Comment');
 
 appPas.use(expressSession(
   {secret: 'mySecretKey',
@@ -30,10 +54,9 @@ appPas.use(flash());
 var initPassport = require('./passport/init');
 initPassport(passport);
 
-
-
 //Create Routes
-var routes = require('./passport/routes/index');
+var routesFunction = require('./passport/routes/index')
+var routes = routesFunction(passport);
 
 var static = require('node-static');
 var http = require('http');
@@ -77,7 +100,7 @@ var app = http.createServer(function (req, res) {
             }
         });
     }
-}).listen(process.env.PORT || 5000);
+}).listen(process.env.PORT || 5000);*/
 
 
 var numClients = 0;
@@ -85,7 +108,8 @@ var rooms = {};
 
 ///INICIO SERVIDOR
 
-var io = require('socket.io').listen(app);
+//var io = require('socket.io').listen(app);
+
 
 io.sockets.on('connection', function (socket){
 
