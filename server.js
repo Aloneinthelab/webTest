@@ -1,13 +1,16 @@
 var express = require('express');
 var app = express();
+var path = require('path');
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
-app.use(express.static('public'));
 //app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
+app.set('views', __dirname);
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
 
 server.listen(5000);
 
-// respond with "hello world" when a GET request is made to the homepage
 
 var dbConfig = require('./passport/db.js');
 var mongoose = require('mongoose');
@@ -18,6 +21,7 @@ mongoose.connect(dbConfig.url);
 var passport = require('passport');
 var expressSession = require('express-session');
 var LocalStrategy = require('passport-local').Strategy;
+var routes = require('./passport/routes/index');
 require('./passport/model/user');
 require('./passport/model/Post');
 require('./passport/model/Comment');
@@ -37,21 +41,32 @@ app.use(flash());
 var initPassport = require('./passport/init');
 initPassport(passport);
 
-var routesFunction = require('./passport/routes/index')
-var routes = routesFunction(passport);
+app.use('/',routes);
 
-app.get('/', function(req, res) {
-  res.sendFile(__dirname + '/index.html');
-});
-app.get('/login', function(req, res) {
-  res.sendFile(__dirname + '/login.html');
-});
-app.get('/signup', function(req, res) {
-  res.sendFile(__dirname + '/signup.html');
-});
-app.get('/', function(req, res) {
-  res.sendFile(__dirname + '/index.html');
-});
+
+var Account = require('./passport/model/account');
+passport.use(new LocalStrategy(Account.authenticate()));
+passport.serializeUser(Account.serializeUser());
+passport.deserializeUser(Account.deserializeUser());
+
+/*
+module.exports = function(passport) {
+
+  app.get('/', function(req, res) {
+    res.sendFile(__dirname + '/index.html');
+  });
+  app.get('/login', function(req, res) {
+    res.sendFile(__dirname + '/login.html');
+  });
+  app.get('/signup', function(req, res) {
+    res.sendFile(__dirname + '/signup.html');
+  });
+  app.get('/profile',isAuthenticated, function(req, res) {
+    res.sendFile(__dirname + '/profile.html');
+  });
+  
+  return app;
+}*/
 /*var mongodb = require('mongodb');
 var dbConfig = require('./passport/db.js');
 var mongoose = require('mongoose');
