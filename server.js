@@ -1,162 +1,63 @@
-var express = require('express');
-var app = express();
+// server.js
+
+var express  = require('express');
+var app      = express();
+var port     = process.env.PORT || 5000;
+var mongoose = require('mongoose');
+var passport = require('passport');
+var flash    = require('connect-flash');
+
+var morgan       = require('morgan');
+var cookieParser = require('cookie-parser');
+var bodyParser   = require('body-parser');
+var session      = require('express-session');
 var path = require('path');
-var server = require('http').Server(app);
-var io = require('socket.io')(server);
-//app.use(express.static('public'));
+
+
+var configDB = require('./config/database.js');
+
+// configuration ===============================================================
+mongoose.connect(configDB.url); // connect to our database
+
+require('./config/passport')(passport); // pass passport for configuration
+
+// set up our express application
+app.use(morgan('dev')); // log every request to the console
+app.use(cookieParser()); // read cookies (needed for auth)
+app.use(bodyParser()); // get information from html forms
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('views', __dirname);
 app.engine('html', require('ejs').renderFile);
-app.set('view engine', 'html');
 
-server.listen(5000);
+app.set('view engine', 'ejs'); // set up ejs for templating
 
-
-var dbConfig = require('./passport/db.js');
-var mongoose = require('mongoose');
-mongoose.connect(dbConfig.url);
-
-// Configuring Passport
-
-var passport = require('passport');
-var expressSession = require('express-session');
-var LocalStrategy = require('passport-local').Strategy;
-var routes = require('./passport/routes/index');
-require('./passport/model/user');
-require('./passport/model/Post');
-require('./passport/model/Comment');
-
-app.use(expressSession(
-  {secret: 'mySecretKey',
+// required for passport
+app.use(session({ 
+  secret: 'aloneinthelab',
   proxy: true,
   resave: true,
-  saveUninitialized: true}
-  ));
+  saveUninitialized: true })); // session secret
 app.use(passport.initialize());
-app.use(passport.session());
-// Using the flash middleware provided by connect-flash to store messages in session
-// and displaying in templates
-var flash = require('connect-flash');
-app.use(flash());
-var initPassport = require('./passport/init');
-initPassport(passport);
+app.use(passport.session()); // persistent login sessions
+app.use(flash()); // use connect-flash for flash messages stored in session
 
-app.use('/',routes);
+// routes ======================================================================
+require('./app/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
 
-
-var Account = require('./passport/model/account');
-passport.use(new LocalStrategy(Account.authenticate()));
-passport.serializeUser(Account.serializeUser());
-passport.deserializeUser(Account.deserializeUser());
-
-/*
-module.exports = function(passport) {
-
-  app.get('/', function(req, res) {
-    res.sendFile(__dirname + '/index.html');
-  });
-  app.get('/login', function(req, res) {
-    res.sendFile(__dirname + '/login.html');
-  });
-  app.get('/signup', function(req, res) {
-    res.sendFile(__dirname + '/signup.html');
-  });
-  app.get('/profile',isAuthenticated, function(req, res) {
-    res.sendFile(__dirname + '/profile.html');
-  });
-  
-  return app;
-}*/
-/*var mongodb = require('mongodb');
-var dbConfig = require('./passport/db.js');
-var mongoose = require('mongoose');
-mongoose.connect(dbConfig.url);
+// launch ======================================================================
+app.listen(port);
+console.log('The magic happens on port ' + port);
 
 
-// Configuring Passport
-
-var passport = require('passport');
-var express = require('express');
-var expressSession = require('express-session');
-var appPas = express();
-var LocalStrategy = require('passport-local').Strategy;
-require('./passport/model/user');
-require('./passport/model/Post');
-require('./passport/model/Comment');
-
-appPas.use(expressSession(
-  {secret: 'mySecretKey',
-  proxy: true,
-  resave: true,
-  saveUninitialized: true}
-  ));
-appPas.use(passport.initialize());
-appPas.use(passport.session());
-// Using the flash middleware provided by connect-flash to store messages in session
-// and displaying in templates
-var flash = require('connect-flash');
-appPas.use(flash());
-
-// Initialize Passport
-var initPassport = require('./passport/init');
-initPassport(passport);
-
-//Create Routes
-var routesFunction = require('./passport/routes/index')
-var routes = routesFunction(passport);
-
-var static = require('node-static');
-var http = require('http');
-var file = new(static.Server)();
-
-var app = http.createServer(function (req, res) {
-  if(req.url === '/'){
-    file.serveFile('/index.html', 200, {}, req, res);
-  }else if(req.method === "POST") {
-    if (req.url === "/login") {
-      console.log("manejando post de login");
-      passport.authenticate('login', {
-        successRedirect: '/index',
-        failureRedirect: '/login',
-        failureFlash : true 
-      });
-    }else if(req.url === "/signup"){
-      console.log("manejando post de singup");
-      passport.authenticate('signup', {
-        successRedirect: '/index',
-        failureRedirect: '/signup',
-        failureFlash : true 
-      });
-    }
-  }else if(req.url === '/login'){
-    file.serveFile('/login.html', 200, {}, req, res);
-  }else if (req.url.substring(1, 6) === 'room=') {
-    file.serveFile('/room.html', 200, {}, req, res);
-  }else if(req.url === '/profile'){
-    file.serveFile('/profile.html', 200, {}, req, res);
-  }else if(req.url === '/indexRoom'){
-    file.serveFile('/indexRoom.html', 200, {}, req, res);
-  }else if(req.url === '/signup'){
-    file.serveFile('/signup.html', 200, {}, req, res);
-  }else if(req.url === '/about'){
-    file.serveFile('/about.html', 200, {}, req, res);
-  } else {
-      file.serve(req, res, function(error, errorRes) {
-          if (error && (error.status === 404)) {
-                file.serveFile('/nofichero.html', 404, {}, req, res);
-            }
-        });
-    }
-}).listen(process.env.PORT || 5000);*/
-
-
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
 var numClients = 0;
 var rooms = {};
 
 ///INICIO SERVIDOR
 
 //var io = require('socket.io').listen(app);
-
 
 io.sockets.on('connection', function (socket){
 
