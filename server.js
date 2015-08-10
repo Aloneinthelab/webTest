@@ -50,8 +50,11 @@ app.listen(port);
 console.log('The magic happens on port ' + port);
 
 
-var server = require('http').Server(app);
+//var server = require('http').Server(app);
+http = require('http');
+var server = http.createServer(app);
 var io = require('socket.io')(server);
+server.listen(app.get('port'));
 var numClients = 0;
 var rooms = {};
 

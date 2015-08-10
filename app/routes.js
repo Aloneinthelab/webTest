@@ -33,7 +33,7 @@ module.exports = function(app, passport) {
 
     // process the signup form
     app.post('/signup', passport.authenticate('local-signup', {
-        successRedirect : '/room', // redirect to the secure profile section
+        successRedirect : '/indexRoom', // redirect to the secure profile section
         failureRedirect : '/signup', // redirect back to the signup page if there is an error
         failureFlash : true // allow flash messages
     }));
@@ -62,11 +62,21 @@ module.exports = function(app, passport) {
     // ROOM ==============================
     // =====================================
 
-    app.get('/room', isLoggedIn, function(req, res) {
+    app.get('/indexRoom', isLoggedIn, function(req, res) {
         res.render('indexRoom.html', {
             user : req.user // get the user out of session and pass to template
         });
     });
+
+    app.get('/room*',isLoggedIn, function(req, res) {
+        if(req.url.substring(1, 6) === 'room='){
+            res.render('room.html', {
+            user : req.user // get the user out of session and pass to template
+            });
+        }
+        
+    });
+
 
     // =====================================
     // LOGOUT ==============================
