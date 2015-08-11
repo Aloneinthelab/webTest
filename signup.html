@@ -24,22 +24,35 @@
           <h1 class="text-center">New User</h1>
       </div>
       <div class="modal-body">
-          <form action="/signup" method="post" class="form col-md-12 center-block">
+          <form action="/signup" method="post" class="form col-md-12 center-block" id="signupForm">
             <div class="form-group">
               <input id="username" name="username" class="form-control input-lg" placeholder="Username" autocomplete="off" />
             </div>
-            <!--<div class="form-group">
+            <div class="form-group">
               <input id="email" name="email" class="form-control input-lg" placeholder="Email" autocomplete="off" type="email"/>
             </div>
-            <div class="form-group">
-              <input id="emailconfirm" class="form-control input-lg" placeholder="Confirm Email" autocomplete="off"/>
+            <!--<div class="form-group">
+              <input id="mainlanguage" name="mainlanguage" class="form-control input-lg" placeholder="mainlanguage" autocomplete="off" type="string"/>
             </div>
             <div class="form-group">
-              <input id="mainlanguage" class="form-control input-lg" placeholder="Main Language" autocomplete="off"/>
-            </div>
-            <div class="form-group">
-              <input id="languagetolearn" class="form-control input-lg" placeholder="Language To Learn" autocomplete="off"/><
+              <input id="seclanguage" name="seclanguage" class="form-control input-lg" placeholder="seclanguage" autocomplete="off"/>
             </div>-->
+            <div class="form-group">
+              <label for="mainlanguage">Main language:</label> <br/>
+              <select name="mainlanguage" id="mainlanguage">
+                <option value="" selected="selected" >- select one -</option>
+                <option value="english" >English</option>
+                <option value="spanish">Spanish</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="seclanguage">Language to learn:</label> <br/>
+              <select name="seclanguage" id="seclanguage">
+                <option value="" selected="selected" >- select one -</option>
+                <option value="english" >English</option>
+                <option value="spanish" >Spanish</option>
+              </select>
+            </div>
             <div class="form-group">
               <input id="pass" name="password" class="form-control input-lg" placeholder="Password" autocomplete="off" type="password" />
             </div>
@@ -47,7 +60,8 @@
               <input id="passconfirm" class="form-control input-lg" placeholder="Confirm Password" autocomplete="off" type="password" />
             </div>
             <div class="form-group" id="button_id">
-              <input id="button" class="btn btn-success btn-lg btn-block" type="submit" value="Register"></input>
+              <input id="signupButton" class="btn btn-success btn-lg btn-block" 
+               value="Register" onclick="return checkForm();"></input>
             </div>
           </form>
       </div>
