@@ -2,16 +2,16 @@
 <html>
   <head>
     <title>Profile - LWDI</title>
-    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="https://cdn.socket.io/socket.io-1.3.5.js"></script>
   	<script src="/js/jquery.min.js"></script>
   	<script src="/js/profile.js"></script>
   </head>
   <body>
     <p>Hello world -- Profile</p>
-    <p id="name"></p>
-    <p id="email"></p>
-    <p id="main language"></p>
-    <p id="language to learn"></p>
+    <p><strong>Username</strong>: <d id="username"><%= user.local.username %></d></p>
+    <p><strong>Email</strong>: <d id="email"><%= user.local.email %></d></p>
+    <p><strong>Main Language</strong>: <d id="mainlanguage"> <%= user.local.mainlanguage %></d></p>
+    <p><strong>Language to learn</strong>:<d  id="seclanguage"> <%= user.local.seclanguage %></d></p>
     <div id="startbuttonDiv">
       <button id="startbutton">Start!</button>
     </div>

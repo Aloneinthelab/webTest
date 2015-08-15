@@ -1,6 +1,6 @@
 // server.js
 
-var express  = require('express');
+var express  = require('express')
 var app      = express();
 var port     = process.env.PORT || 5000;
 var mongoose = require('mongoose');
@@ -12,6 +12,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser   = require('body-parser');
 var session      = require('express-session');
 var path = require('path');
+var usersArray = [];
 
 
 var configDB = require('./config/database.js');
@@ -45,27 +46,27 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 // routes ======================================================================
 require('./app/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
 
-// launch ======================================================================
+// launch =====================================================================
+
 app.listen(port);
 console.log('The magic happens on port ' + port);
 
 
-//var server = require('http').Server(app);
-http = require('http');
-var server = http.createServer(app);
-var io = require('socket.io')(server);
-server.listen(app.get('port'));
+/*var server = require('http').Server(app);
+var io = require('socket.io').listen(server);*/
+
+var http = require( "http" ).createServer(app);
+var io = require( "socket.io" )(http);
+http.listen(8080, "127.0.0.1");
+
 var numClients = 0;
 var rooms = {};
 
 ///INICIO SERVIDOR
 
-//var io = require('socket.io').listen(app);
-
-io.sockets.on('connection', function (socket){
-
+io.on('connection', function (socket){
+  console.log("Client connected");
   var clientAddress = socket.handshake.address;
-
   socket.on('sign in', function (username, room) {
 
     if (!username || !room) {
@@ -137,18 +138,24 @@ io.sockets.on('connection', function (socket){
       }else{
         socket.broadcast.to(message.room).emit('message', message);
       }
+    }
+  });
 
+  socket.on('room', function (data){
+    console.log('message: ' + data.username + " -- " + data.lang1 + " -- " + data.lang2);
+    var roundNumber = 1000000;
+    var randRoom = Math.round((Math.random() * roundNumber));
+
+    roomNumber = searchUser(data.lang1,data.lang2);
+    if(roomNumber!=0){        //if we find the User we send the number of room
+      console.log("RoomNumber: "+ roomNumber);
+    }else{                    //if not we add the user
+      var user = {username:data.username, lang1:data.lang1, lang2:data.lang2, roomNumber:randRoom};
+      usersArray.push(user);
+      console.log("Adding user");
     }
 
-
-  });
-
-  socket.on('profile', function(nick,pass){
-    console.log('message: ' + nick + " -- " + pass);
-  });
-
-  socket.on('update', function(nick,pass){
-    console.log('message: ' + nick + " -- " + pass);
+    
   });
 
 });
@@ -156,8 +163,14 @@ io.sockets.on('connection', function (socket){
 
 
 
-
-
+function searchUser(lang1,lang2) {
+  for (var index = 0; index < usersArray.length; index++) {
+    if(lang1 == usersArray[index].lang2 && lang2 == usersArray[index].lang1){
+      return usersArray[index].roomNumber;
+    }
+  }
+  return 0;
+}
 
 
 /*
