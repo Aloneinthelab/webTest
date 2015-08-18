@@ -48,7 +48,8 @@ if (room === '') {
   room = 'Por defecto';
 }
 
-var socket = io.connect();
+//var socket = io.connect();
+var socket = io.connect("http://localhost:8080");
 
 if (room !== '') {
   console.log('Intentando entrar', room);

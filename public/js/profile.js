@@ -1,6 +1,8 @@
 $(document).ready(function(){
 	var roundNumber = 1000000;
-	var socket = io.connect( "http://localhost:8080");
+	var socket = io.connect("http://localhost:8080");
+
+	
 
 	$("#startbutton").click(function(){
 		var username = $("#username").text();
@@ -10,7 +12,11 @@ $(document).ready(function(){
   		socket.emit('room',{ username: username ,
   			lang1: lang1 ,
   			lang2: lang2});
-  		//var roomURL = '/room=' + room + '&user=' + user + '&lang=a';
-    	//window.location = roomURL;
+
+  		socket.on('roomNumber',function (msg){
+    		console.log("Recibido numero de room: " + msg);
+    		var roomURL = '/room=' + msg + '&user=' + username + '&lang=a';
+   		  window.location = roomURL;
+    	});
 	});
 });

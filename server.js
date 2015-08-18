@@ -65,8 +65,8 @@ var rooms = {};
 ///INICIO SERVIDOR
 
 io.on('connection', function (socket){
-  console.log("Client connected");
   var clientAddress = socket.handshake.address;
+  console.log("Client connected");
   socket.on('sign in', function (username, room) {
 
     if (!username || !room) {
@@ -149,23 +149,23 @@ io.on('connection', function (socket){
     roomNumber = searchUser(data.lang1,data.lang2);
     if(roomNumber!=0){        //if we find the User we send the number of room
       console.log("RoomNumber: "+ roomNumber);
+      socket.join(roomNumber);
+      socket.emit('roomNumber', roomNumber);
+      socket.to(roomNumber).emit('roomNumber', roomNumber);
     }else{                    //if not we add the user
-      var user = {username:data.username, lang1:data.lang1, lang2:data.lang2, roomNumber:randRoom};
+      var user = {username:data.username, lang1:data.lang1, lang2:data.lang2, roomNumber:randRoom, state:'on'};
       usersArray.push(user);
-      console.log("Adding user");
+      socket.join(randRoom);
+      console.log("Adding user and create a room");
     }
-
-    
   });
-
 });
-
-
 
 
 function searchUser(lang1,lang2) {
   for (var index = 0; index < usersArray.length; index++) {
-    if(lang1 == usersArray[index].lang2 && lang2 == usersArray[index].lang1){
+    if(lang1 == usersArray[index].lang2 && lang2 == usersArray[index].lang1  && usersArray[index].state == 'on'){
+      usersArray[index].state = 'off';
       return usersArray[index].roomNumber;
     }
   }
