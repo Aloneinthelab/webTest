@@ -49,7 +49,12 @@ if (room === '') {
 }
 
 //var socket = io.connect();
-var socket = io.connect("http://localhost:8080");
+var url = window.location.href;
+if(url.indexOf("localhost")>-1){
+    var socket = io.connect("http://localhost:8080");
+}else if(url.indexOf("herokuapp")>-1){
+    var socket = io.connect("http://aloneinthelab-web-test.herokuapp.com:8080");
+}
 
 if (room !== '') {
   console.log('Intentando entrar', room);
