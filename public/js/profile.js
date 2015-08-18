@@ -7,8 +7,6 @@ $(document).ready(function(){
   }else if(url.indexOf("herokuapp")>-1){
     var socket = io.connect("http://aloneinthelab-web-test.herokuapp.com:8080");
   }
-	
-
 	$("#startbutton").click(function(){
 		var username = $("#username").text();
 		var lang1 = $("#mainlanguage").text();
