@@ -57,7 +57,7 @@ var io = require('socket.io').listen(server);*/
 
 var http = require( "http" ).createServer(app);
 var io = require( "socket.io" )(http);
-http.listen(8080, "127.0.0.1");
+http.listen(8080);
 
 var numClients = 0;
 var rooms = {};

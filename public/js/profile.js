@@ -1,8 +1,7 @@
 $(document).ready(function(){
 	var roundNumber = 1000000;
+  console.log(window.location.href);
 	var socket = io.connect("http://localhost:8080");
-
-	
 
 	$("#startbutton").click(function(){
 		var username = $("#username").text();
