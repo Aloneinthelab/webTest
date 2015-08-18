@@ -1,7 +1,13 @@
 $(document).ready(function(){
 	var roundNumber = 1000000;
-  console.log(window.location.href);
-	var socket = io.connect("http://localhost:8080");
+  var url = window.location.href;
+
+  if(url.indexOf("localhost")>-1){
+    var socket = io.connect("http://localhost:8080");
+  }else if(url.indexOf("herokuapp")>-1){
+    var socket = io.connect("http://aloneinthelab-web-test.herokuapp.com:8080");
+  }
+	
 
 	$("#startbutton").click(function(){
 		var username = $("#username").text();
