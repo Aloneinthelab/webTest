@@ -13,7 +13,6 @@
 	</head>
 
 	<body>
-
 		<nav class="navbar navbar-inverse">
 		  <div class="container-fluid">
 		    <div class="navbar-header">
@@ -56,11 +55,19 @@
 		    		</div>
 		  			<audio id="remoteVideo" alt="Remote video" autoplay ></audio>
 		</div>
+		<div id="infoDiv" style="display: none;">
+			<p id="level"><%= user.local.level %></p>
+			<p id="mainlanguage"><%= user.local.mainlanguage %></p>
+		</div>
+		<div id="topicDiv">
+			<h1 id="topic"></h1>
+		</div>
 
 
 		<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 		<script type="text/javascript" src='js/rooms/main.js'></script>
+		<script type="text/javascript" src='js/rooms/topics.js'></script>
 
 	</body>
 </html>

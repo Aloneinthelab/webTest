@@ -50,6 +50,7 @@ require('./app/routes.js')(app, passport); // load our routes and pass in our ap
 
 app.listen(port);
 console.log('The magic happens on port ' + port);
+//addTopic();   //Call function to add a new topic to speak
 
 var http = require( "http" ).createServer(app);
 var io = require( "socket.io" )(http);
@@ -106,10 +107,31 @@ io.on('connection', function (socket){
 
 
   socket.on('message', function (message) {
-    console.log('message: ', message.room , message.type);
+    console.log('message: ', message.type, message.level,message.language);
     if(message.type === 'db'){
-
-                //aqui iria lo de base de datos
+      var MongoClient = require('mongodb').MongoClient;
+      var url = 'mongodb://jgines:12344321@ds051740.mongolab.com:51740/aloneinthelab-db';
+      MongoClient.connect(url, function (err, db) {
+        if (err) {
+          console.log('Unable to connect to the mongoDB server. Error:', err);
+        } else {
+          console.log('Connection established');
+          var collection = db.collection('topics');
+          var num = 0;
+          collection.find({
+            level: message.level,
+            language: message.language}).count(function(err, count) {
+              num = count;
+            });
+          var cursor = collection.find({
+            level: message.level,
+            language: message.language}).toArray(function(err,topics) {
+              var random = Math.floor(Math.random()*num);
+              console.log("Enviamos el topic: " + topics[random].topic);
+              socket.emit('topic', topics[random].topic);
+            });
+        }
+      });
 
     }else{
 
@@ -167,6 +189,35 @@ function searchUser(lang1,lang2) {
   }
   return 0;
 }
+
+function addTopic(){
+  var MongoClient = require('mongodb').MongoClient;
+  var url = 'mongodb://jgines:12344321@ds051740.mongolab.com:51740/aloneinthelab-db';
+
+  MongoClient.connect(url, function (err, db) {
+    if (err) {
+      console.log('Unable to connect to the mongoDB server. Error:', err);
+    } else {
+      //HURRAY!! We are connected. :)
+      console.log('Connection established to', url);
+      var collection = db.collection('topics');
+      var topic1 = {
+        level    : '1',
+        language  : 'english',
+        topic   : 'Speak about your pet'
+      };
+      collection.insert(topic1, function (err, result) {
+        if (err) {
+          console.log(err);
+        }else {
+          console.log('Inserted %d documents into the "topics" collection');
+        }
+      });
+    }
+  });
+}
+
+
 
 
 /*

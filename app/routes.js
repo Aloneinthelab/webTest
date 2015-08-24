@@ -85,10 +85,9 @@ module.exports = function(app, passport) {
     app.get('/room*',isLoggedIn, function(req, res) {
         if(req.url.substring(1, 6) === 'room='){
             res.render('room.html', {
-            user : req.user // get the user out of session and pass to template
+                user : req.user // get the user out of session and pass to template
             });
-        }
-        
+        } 
     });
     // =====================================
     // LOGOUT ==============================

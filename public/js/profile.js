@@ -9,7 +9,6 @@ $(document).ready(function(){
   }
 	$("#startbutton").click(function(){
     loadingGif();
-    $("#startbutton").push();
 		var username = $("#username").text();
 		var lang1 = $("#mainlanguage").text();
 		var lang2 = $("#seclanguage").text();
